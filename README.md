@@ -1,3 +1,4 @@
-# flutter_course_quiz
+# Flutter Quiz App
 
-A new Flutter project.
+A Quiz App written in Dart/Flutter
+

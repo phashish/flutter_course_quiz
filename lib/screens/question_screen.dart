@@ -24,6 +24,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
     super.initState();
     questionId = widget.questionId;
     question = questions[questionId]!;
+    question.options.shuffle();
     answeredQuestions = [];
   }
 
@@ -49,6 +50,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
         questionId++;
         question = questions[questionId]!;
+        question.options.shuffle();
         _selectedIndex = 99999999;
         _buttonDisabled = true;
         if (questionId == questions.length) {
@@ -63,67 +65,72 @@ class _QuestionScreenState extends State<QuestionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.deepPurple.shade100,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            const Image(image: AssetImage('assets/images/quiz-nbg.png')),
-            Padding(
-              padding: const EdgeInsets.only(left: 50.0, right: 50.0),
-              child: Text(
-                'Question\n${question.question}',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Colors.deepPurple.shade900,
-                  fontWeight: FontWeight.bold,
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              const Image(image: AssetImage('assets/images/quiz-nbg.png')),
+              Padding(
+                padding: const EdgeInsets.only(left: 50.0, right: 50.0),
+                child: Text(
+                  'Question\n${question.question}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: Colors.deepPurple.shade900,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-            ListView.separated(
-              padding: const EdgeInsets.only(left: 50.0, right: 50.0),
-              shrinkWrap: true,
-              itemCount: question.options.length,
-              separatorBuilder: (context, index) {
-                return const Divider();
-              },
-              itemBuilder: (context, index) {
-                return ListTile(
-                  onTap: () {
-                    setState(() {
-                      _selectedIndex = index;
-                      _buttonDisabled = false;
-                    });
-                  },
-                  selected: index == _selectedIndex,
-                  selectedTileColor: Colors.deepPurple.shade900,
-                  selectedColor: Colors.amber,
-                  contentPadding:
-                      const EdgeInsets.only(left: 50.0, right: 50.0),
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                      color: Colors.deepPurple.shade900,
-                      width: 2,
+              ListView.separated(
+                padding: const EdgeInsets.all(50.0),
+                shrinkWrap: true,
+                itemCount: question.options.length,
+                separatorBuilder: (context, index) {
+                  return const Divider();
+                },
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    onTap: () {
+                      setState(() {
+                        _selectedIndex = index;
+                        _buttonDisabled = false;
+                      });
+                    },
+                    selected: index == _selectedIndex,
+                    selectedTileColor: Colors.deepPurple.shade900,
+                    selectedColor: Colors.amber,
+                    contentPadding:
+                        const EdgeInsets.only(left: 50.0, right: 50.0),
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        color: Colors.deepPurple.shade900,
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  title: Text(
-                    question.options[index],
-                    textAlign: TextAlign.center,
-                  ),
-                );
-              },
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepPurple.shade800,
-                  foregroundColor: Colors.white),
-              onPressed: _buttonDisabled ? null : nextQuestion,
-              child: Text(
-                _buttonText,
+                    title: Text(
+                      question.options[index],
+                      textAlign: TextAlign.center,
+                    ),
+                  );
+                },
               ),
-            ),
-          ],
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurple.shade800,
+                    foregroundColor: Colors.white),
+                onPressed: _buttonDisabled ? null : nextQuestion,
+                child: Text(
+                  _buttonText,
+                ),
+              ),
+              const SizedBox(
+                height: 100,
+              ),
+            ],
+          ),
         ),
       ),
     );
